@@ -1,32 +1,36 @@
-from flask import Flask, render_template, abort
+import os
+from flask import Flask, render_template, request, url_for, flash, redirect
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-
-@app.errorhandler(404)
-def page_not_found(error):
-    return render_template('404.html'), 404
-
-@app.errorhandler(500)
-def internal_error(error):
-    return render_template('500.html'), 500
-
+messages = [
+    {
+        'title': 'Message One',
+        'content': 'Message One Content'
+    },
+    {
+        'title': 'Message Two',
+        'content': 'Message Two Content'
+    }
+]
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("index.html", messages=messages)
 
-@app.route('/messages/<int:idx>/')
-def messages(idx):
-    app.logger.info('Building the messages list ...')
-    messages = ['Message Zero', 'Message One', 'Message Two']
-    try:
-        app.logger.debug(f'Get message with index: {idx}')
-        return render_template('message.html', message=messages[idx])
-    except IndexError:
-        app.logger.error(f'Index {idx} is out of range causing an IndexError')
-        abort(404)
+@app.route('/create/', methods=('GET', 'POST'))
+def create():
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
 
-@app.route('/500')
-def error500():
-    abort(500)
+        if not title:
+            flash('Title is required !')
+        if not content:
+            flash('Content is required !')
+        else:
+            messages.append({'title': title, 'content': content})
+            return redirect(url_for('index'))
+
+    return render_template('create.html')
