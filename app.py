@@ -1,36 +1,34 @@
 import os
 from flask import Flask, render_template, request, url_for, flash, redirect
+from forms import CourseForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-messages = [
+courses_list = [
     {
-        'title': 'Message One',
-        'content': 'Message One Content'
-    },
-    {
-        'title': 'Message Two',
-        'content': 'Message Two Content'
+        'title': 'Python 101',
+        'description': 'Learn Python basics',
+        'price': 34,
+        'available': True,
+        'level': 'Beginner'
     }
 ]
 
-@app.route('/')
+@app.route('/', methods=('GET', 'POST'))
 def index():
-    return render_template("index.html", messages=messages)
+    form = CourseForm()
+    if form.validate_on_submit():
+        courses_list.append({
+            'title': form.title.data,
+            'description': form.description.data,
+            'price': form.price.data,
+            'available': form.available.data,
+            'level': form.level.data
+        })
+        return redirect(url_for('courses'))
+    return render_template("index.html", form=form)
 
-@app.route('/create/', methods=('GET', 'POST'))
-def create():
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-
-        if not title:
-            flash('Title is required !')
-        if not content:
-            flash('Content is required !')
-        else:
-            messages.append({'title': title, 'content': content})
-            return redirect(url_for('index'))
-
-    return render_template('create.html')
+@app.route('/courses/')
+def courses():
+    return render_template('courses.html', courses_list=courses_list)
