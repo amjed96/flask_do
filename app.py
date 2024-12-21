@@ -1,39 +1,22 @@
-from flask import Flask, abort
-from markupsafe import escape
+import datetime
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
 @app.route('/')
-@app.route('/index/')
-def hello():
-    """ Index route """
-
-    return '<h1>Hello, World!</h1>'
+def index():
+    return render_template("index.html", utc_time=datetime.datetime.now(datetime.timezone.utc))
 
 @app.route('/about/')
 def about():
-    """ About route """
+    return render_template('about.html')
 
-    return '<h3>This is a Flask web application.</h3>'
-
-@app.route('/capitalize/<word>/')
-def capitalize(word):
-    """ Capitalize words """
-
-    return f'<h1>{escape(word.capitalize())}</h1>'
-
-@app.route('/add/<int:x>/<int:y>/')
-def add(x, y):
-    """ Sum 2 numbers """
-
-    return f'<h1>{x+y}</h1>'
-
-@app.route('/users/<int:user_id>/')
-def greet_user(user_id):
-    """ Greet User """
-    users = ['Bob', 'Jane', 'Adam', 'Leonard']
-    try:
-        return f'<h2>Hello {users[user_id]}'
-    except IndexError:
-        abort(404)
+@app.route('/comments/')
+def comments():
+    comment_list = [
+        'this is the first comment.',
+        'this is the second comment.',
+        'this is the third comment.',
+        'this is the fourth comment.'
+    ]
+    return render_template('comments.html', comments=comment_list)
