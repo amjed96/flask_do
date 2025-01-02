@@ -1,20 +1,41 @@
-import sqlite3
+import os
+import psycopg2
 
-connection = sqlite3.connect('database.db')
-
-with open('schema.sql') as f:
-    connection.executescript(f.read())
-
-cur = connection.cursor()
-
-cur.execute(
-    "INSERT INTO posts (title, content) VALUES (?, ?)",
-    ('First Post', 'Content for the first post')
-)
-cur.execute(
-    "INSERT INTO posts (title, content) VALUES (?, ?)",
-    ('Second Post', 'Content for the second post')
+conn = psycopg2.connect(
+    host="localhost",
+    database="flask_db",
+    user=os.environ['DB_USERNAME'],
+    password=os.environ['DB_PASSWORD']
 )
 
-connection.commit()
-connection.close()
+cur = conn.cursor()
+
+cur.execute('DROP TABLE IF EXISTS books;')
+cur.execute('CREATE TABLE books (id SERIAL PRIMARY KEY,'
+                                'title VARCHAR (150) NOT NULL,'
+                                'author VARCHAR (150) NOT NULL,'
+                                'pages_num INTEGER NOT NULL,'
+                                'review TEXT,'
+                                'date_added date DEFAULT CURRENT_TIMESTAMP);')
+
+cur.execute('INSERT INTO books (title, author, pages_num, review)'
+            'VALUES (%s, %s, %s, %s)',
+            ('A Tale of Two Cities',
+             'Charles Dickens',
+             489,
+             'A great classic!')
+            )
+
+
+cur.execute('INSERT INTO books (title, author, pages_num, review)'
+            'VALUES (%s, %s, %s, %s)',
+            ('Anna Karenina',
+             'Leo Tolstoy',
+             864,
+             'Another great classic!')
+            )
+
+conn.commit()
+
+cur.close()
+conn.close()
