@@ -16,7 +16,13 @@
             flex-wrap: wrap;
         }
 
-        .student {
+        .comment {
+            padding: 10px;
+            margin: 10px;
+            background-color: #fff;
+        }
+
+        .post {
             flex: 20%;
             padding: 10px;
             margin: 5px;
@@ -24,14 +30,7 @@
             inline-size: 100%;
         }
 
-        .bio {
-            padding: 10px;
-            margin: 5px;
-            background-color: #ffffff;
-            color: #004835;
-        }
-
-        .name a {
+        .title a {
             color: #00a36f;
             text-decoration: none;
         }
@@ -42,12 +41,13 @@
             margin-left: 50px;
             text-decoration: none;
         }
+
     </style>
 </head>
 <body>
     <nav>
         <a href="{{ url_for('index') }}">FlaskApp</a>
-        <a href="{{ url_for('create') }}">Create</a>
+        <a href="{{ url_for('comments') }}">Comments</a>
         <a href="#">About</a>
     </nav>
     <hr>
