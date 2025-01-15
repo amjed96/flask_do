@@ -1,7 +1,7 @@
 name: Pull request to Develop
 
 on:
-  pull-request:
+  pull_request:
     branches:
       - develop
     types:
@@ -10,7 +10,7 @@ on:
       - reopened
 
 jobs:
-  build:
+  check_code:
     - name: Check code quality and coverage
     runs-on: ubuntu-latest
     steps:
