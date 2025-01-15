@@ -1,17 +1,17 @@
 name: Pull request to Develop
 
 on:
-  push:
+  pull-request:
     branches:
       - develop
-    # types:
-    #   - opened
-    #   - synchronize
-    #   - reopened
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   check_code:
-    name: Check code quality and coverage
+    - name: Check code quality and coverage
     runs-on: ubuntu-latest
     steps:
       - name: Python linter
