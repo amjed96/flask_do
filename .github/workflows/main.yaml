@@ -1,0 +1,20 @@
+name: Pull request to Develop
+
+on:
+  pull-request:
+    branches:
+      - develop
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  check-code:
+    - name: Check code quality and coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Python linter
+        id: pylint
+        uses: docker://reasonsoftware/action-pylint:v2
+    
