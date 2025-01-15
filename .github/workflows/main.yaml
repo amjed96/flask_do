@@ -10,7 +10,7 @@ on:
       - reopened
 
 jobs:
-  checkcode:
+  build:
     - name: Check code quality and coverage
     runs-on: ubuntu-latest
     steps:
