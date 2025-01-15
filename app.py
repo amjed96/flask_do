@@ -37,3 +37,7 @@ def greet_user(user_id):
         return f'<h2>Hello {users[user_id]}'
     except IndexError:
         abort(404)
+
+@app.route('/test/')
+def testing():
+    print("Hello Pipline!")
