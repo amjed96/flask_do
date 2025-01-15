@@ -11,7 +11,7 @@ on:
 
 jobs:
   check_code:
-    - name: Check code quality and coverage
+    name: Check code quality and coverage
     runs-on: ubuntu-latest
     steps:
       - name: Python linter
